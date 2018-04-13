@@ -124,22 +124,18 @@ class Wc(Command):
         for i in range(len(args)):
             args[i] = strip_quotes(args[i])
 
-        if not args:
-            common_args = self.InputStream.read()
-            common_args = common_args.split('\n')
-            # убираем последний пустой элемент (который создал сплит '\n')
-            common_args = common_args[:-1]
-        else:
-            common_args = args
-
-        for file in common_args:
+        for file in args:
             try:
                 with open(file) as f:
                     lines = f.read()
                     print(self.statistics(lines), file=self.OutputStream)
             except FileNotFoundError:
                 print("file " + file + " not found",
-                      file=self.ErrorStream)
+                       file = self.ErrorStream)
+
+        if not args:
+            lines = self.InputStream.read()
+            print(self.statistics(lines), file=self.OutputStream)
 
 
     def statistics(self, s):
