@@ -8,16 +8,16 @@ from parser import *
 def multiplexor(cmd):
     """Associates command with appropriate Command class
     cmd: string"""
-    for sbcls in Command.__subclasses__():
-        if sbcls.mnemonic == cmd:
-            return sbcls
+    for sub_class in Command.__subclasses__():
+        if sub_class.mnemonic == cmd:
+            return sub_class
     Default.cmd = cmd
     return Default
 
 
 class Command:
     """Base class for each command
-    mnemonig: command in string"""
+    mnemonic: command in string"""
 
     mnemonic = ""
 

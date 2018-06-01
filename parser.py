@@ -7,40 +7,46 @@ def clip_both_quotes(s):
     of 3 list and 3 flags: [], flag1, [], flag2 ,[], flag3
     1st list) places of single quotes in string s in format:
     [(a1,b1),(a2,b2),..] where (a_,b_) - alternate intervals of
-    substrings whcich included in single quotes and intervals between single
+    substrings which included in single quotes and intervals between single
     quotes, flag1 - flag of which interval the first
     2nd) - the same but for double quotes
     3rd) - the same but for both types of quotes"""
-    singles = []
-    doubles = []
-    i = 0
-    while i < len(s):
-        if s[i] == '\\':
-            i += 2
-            continue
 
-        if s[i] == "'":
-            a = i
-            i += 1
-            while i < len(s) and s[i] != "'":
+    def validate_quotes(s):
+        singles = []
+        doubles = []
+        i = 0
+
+        while i < len(s):
+            if s[i] == '\\':
+                i += 2
+                continue
+
+            if s[i] == "'":
+                a = i
                 i += 1
-            if i >= len(s):
-                raise Exception("unclosed single quotes")
-            singles.append((a, i))
-
-        if s[i] == '"':
-            a = i
-            i += 1
-            while i < len(s) and s[i] != '"':
-                if s[i] == '\\':
-                    i += 2
-                else:
+                while i < len(s) and s[i] != "'":
                     i += 1
-            if i >= len(s):
-                raise Exception("unclosed double quotes")
-            doubles.append((a, i))
+                if i >= len(s):
+                    raise Exception("unclosed single quotes")
+                singles.append((a, i))
 
-        i += 1
+            if s[i] == '"':
+                a = i
+                i += 1
+                while i < len(s) and s[i] != '"':
+                    if s[i] == '\\':
+                        i += 2
+                    else:
+                        i += 1
+                if i >= len(s):
+                    raise Exception("unclosed double quotes")
+                doubles.append((a, i))
+
+            i += 1
+            return singles, doubles
+
+    singles, doubles = validate_quotes(s)
 
     # ----------SINGLES---------
     s_n_singles = set()
@@ -144,12 +150,11 @@ def split_by_spaces(s):
 
 
 def substitute_dollar(s, envs):
-    """substituting dollars (enviroment anchors) by environment variables (
-    does notheing in single quotes) """
+    """substituting dollars (environment anchors) by environment variables (
+    does nothing in single quotes) """
     singles, sing_first, _, _, _, _ = clip_both_quotes(s)
 
     pattern_keys = "|".join(envs.keys())
-    # default_pattern = re.compile("(?=\$(" + pattern_keys + ")(?=[\s\W\b`\-=~!@$\$#%^&*()+\[\]{};\\:\"|<,.\/<>?]))\0|(?!\$(" + pattern_keys + ")(?=[\s\W\b`\-=~!@$\$#%^&*()+\[\]{};\\:\"|<,.\/<>?]))\$\w*(?=[\s\W\b`\-=~!@$\$#%^&*()+\[\]{};\\:\"|<,.\/<>?])")
     default_pattern = re.compile(r'\$(?!(' + pattern_keys + r')(?=\b))\w*')
     log.info("default_pattern: " + str(default_pattern))
 
