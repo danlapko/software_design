@@ -1,4 +1,4 @@
-#!/bin/python
+#!/home/danila/apps/anaconda3/bin/python3.6
 from io import StringIO
 
 from commands import *
@@ -13,7 +13,7 @@ def loop():
         line = input(">")
         try:
             process(line, envs)
-        except Exception as e:
+        except AttributeError as e:
             print(e)
 
 

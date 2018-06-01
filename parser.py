@@ -28,7 +28,7 @@ def clip_both_quotes(s):
                 while i < len(s) and s[i] != "'":
                     i += 1
                 if i >= len(s):
-                    raise Exception("unclosed single quotes")
+                    raise AttributeError("unclosed single quotes")
                 singles.append((a, i))
 
             if s[i] == '"':
@@ -40,7 +40,7 @@ def clip_both_quotes(s):
                     else:
                         i += 1
                 if i >= len(s):
-                    raise Exception("unclosed double quotes")
+                    raise AttributeError("unclosed double quotes")
                 doubles.append((a, i))
 
             i += 1
@@ -239,5 +239,5 @@ def is_assignment(block):
 
     tmp = tmp.split("=")
     if len(tmp) != 2 or not tmp[0].isalpha():
-        raise Exception("incorrect assigment")
+        raise AttributeError("incorrect assigment")
     return tmp
