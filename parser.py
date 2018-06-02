@@ -1,5 +1,6 @@
 import re
 import logging as log
+import doctest
 
 
 def clip_both_quotes(s):
@@ -10,9 +11,11 @@ def clip_both_quotes(s):
     substrings which included in single quotes and intervals between single
     quotes, flag1 - flag of which interval the first
     2nd) - the same but for double quotes
-    3rd) - the same but for both types of quotes"""
+    3rd) - the same but for both types of quotes
+    >>> clip_both_quotes("'ec'\\"ho\\" 123 $a")
+    """
 
-    def validate_quotes(s):
+    def detect_quotes(s):
         singles = []
         doubles = []
         i = 0
@@ -44,41 +47,32 @@ def clip_both_quotes(s):
                 doubles.append((a, i))
 
             i += 1
-            return singles, doubles
+        return singles, doubles
 
-    singles, doubles = validate_quotes(s)
+    def apply_quotes(quotes):
+        s_n_quotes = set()
+        is_first = True
+        for (a, b) in quotes:
+            s_n_quotes.add(a)
+            s_n_quotes.add(b)
+        s_n_quotes.discard((len(s) - 1))
+        if 0 not in s_n_quotes:
+            s_n_quotes.add(0)
+            is_first = False
+        s_n_quotes.add(len(s))
+        sor = sorted(s_n_quotes)
+        quotes = []
+        for i in range(1, len(sor)):
+            quotes.append((sor[i - 1], sor[i]))
+        return is_first, quotes
+
+    singles, doubles = detect_quotes(s)
 
     # ----------SINGLES---------
-    s_n_singles = set()
-    sing_first = True
-    for (a, b) in singles:
-        s_n_singles.add(a)
-        s_n_singles.add(b)
-    s_n_singles.discard((len(s) - 1))
-    if 0 not in s_n_singles:
-        s_n_singles.add(0)
-        sing_first = False
-    s_n_singles.add(len(s))
-    sor = sorted(s_n_singles)
-    singles = []
-    for i in range(1, len(sor)):
-        singles.append((sor[i - 1], sor[i]))
+    sing_first, singles = apply_quotes(singles)
 
     # ----------Doubles---------
-    s_n_doubles = set()
-    doub_first = True
-    for (a, b) in doubles:
-        s_n_doubles.add(a)
-        s_n_doubles.add(b)
-    s_n_doubles.discard(len(s) - 1)
-    if 0 not in s_n_doubles:
-        s_n_doubles.add(0)
-        doub_first = False
-    s_n_doubles.add(len(s))
-    sor = sorted(s_n_doubles)
-    doubles = []
-    for i in range(1, len(sor)):
-        doubles.append((sor[i - 1], sor[i]))
+    doub_first, doubles = apply_quotes(doubles)
 
     # ----------BOTH---------
     s_n_both = set()
@@ -241,3 +235,7 @@ def is_assignment(block):
     if len(tmp) != 2 or not tmp[0].isalpha():
         raise AttributeError("incorrect assigment")
     return tmp
+
+
+if __name__ == "__main__":
+    doctest.testmod()

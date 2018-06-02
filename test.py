@@ -1,4 +1,5 @@
 import unittest
+
 from io import StringIO
 
 from parser import *
@@ -51,7 +52,7 @@ class ParserTestCase(unittest.TestCase):
     def test_block_to_cmd_args(self):
         s1 = "'ec'\"ho\" 123 $a"
         ref1 = ('echo', ' 123 $a')
-        assert block_to_cmd_args(s1) == ref1
+        assert ref1 == block_to_cmd_args(s1)
 
     def test_is_assigment(self):
         s1 = "jasldj \"=b\"=2"
@@ -124,7 +125,7 @@ class CommandsTestCase(unittest.TestCase):
         ref1 = "lsdjf" \
                "\njsldfja" \
                "\nf dfhjasdf " \
-               "\nasdfj"
+               "\nasdfj\n"
 
         assert stream2.getvalue() == ref1
 
