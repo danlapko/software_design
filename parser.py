@@ -169,7 +169,6 @@ def substitute_dollar(s, envs):
             pattern = r'\$' + key + r'\b'
             log.info("pattern: " + pattern)
             l = re.sub(
-                # "\$" + key + "(?=[\s\W\b`\-=~!@$\$#%^&*()+\[\]{};\\:\"|<,.\/<>?])",
                 pattern,
                 val,
                 l)
