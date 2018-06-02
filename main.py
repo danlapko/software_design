@@ -13,7 +13,7 @@ def loop():
         try:
             process(line, envs)
         except AttributeError as e:
-            print(e)
+            print(e, file=sys.stderr)
 
 
 def process(line, envs):

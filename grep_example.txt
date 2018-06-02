@@ -1,6 +1,6 @@
-This' 'is' atest file
+This atest file
 
-for mega-grep
+for mega-grep fi
 really cool
 so much "is " a
 
@@ -8,3 +8,7 @@ all
 
 bye world A
 BYE world
+1
+2
+3
+4

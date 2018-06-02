@@ -141,15 +141,65 @@ class CommandsTestCase(unittest.TestCase):
 
         assert stream2.getvalue() == ref1
 
-    def test_Grep(self):
-        args = '"a" -i -w -A 1 grep_example.txt '
+    def test_Grep_simple(self):
+        # ----- SIMPLE ------
         stream1 = StringIO()
         stream2 = StringIO()
         d = Grep(stream1, stream2)
+        args = 'so grep_example.txt '
         d.exec(args)
-        ref1 = 'so much "is " a\n\nbye world A\nBYE world\n'
-
+        ref1 = 'so much "is " a\n'
         assert ref1 == stream2.getvalue()
+
+    def test_Grep_ignore_case(self):
+        # ----- IGNORE CASE ------
+        stream1 = StringIO()
+        stream2 = StringIO()
+        d = Grep(stream1, stream2)
+        args = '-i bye grep_example.txt '
+        d.exec(args)
+        ref2 = 'bye world A\nBYE world\n'
+        assert ref2 == stream2.getvalue()
+
+    def test_Grep_word(self):
+        # ----- WORD ------
+        stream1 = StringIO()
+        stream2 = StringIO()
+        d = Grep(stream1, stream2)
+        args = '-w fi grep_example.txt '
+        d.exec(args)
+        ref3 = 'for mega-grep fi\n'
+        assert ref3 == stream2.getvalue()
+
+    def test_Grep_A_opption(self):
+        # ----- -A ------
+        stream1 = StringIO()
+        stream2 = StringIO()
+        d = Grep(stream1, stream2)
+        args = '-A 2 world grep_example.txt '
+        d.exec(args)
+        ref4 = 'bye world A\nBYE world\n1\n2\n'
+        assert ref4 == stream2.getvalue()
+
+    def test_Grep_all_flags(self):
+        # ----- ALL TOGETHER ------
+        stream1 = StringIO()
+        stream2 = StringIO()
+        d = Grep(stream1, stream2)
+        args = '-i -w -A 1 "a" grep_example.txt '
+        d.exec(args)
+        ref5 = 'so much "is " a\n\nbye world A\nBYE world\n'
+        assert ref5 == stream2.getvalue()
+
+    def test_Grep_regexps(self):
+        # ----- REGEXPS ------
+        stream1 = StringIO()
+        stream2 = StringIO()
+        d = Grep(stream1, stream2)
+        args = '"or\s.ega" grep_example.txt '
+        d.exec(args)
+        ref5 = 'for mega-grep fi\n'
+        assert ref5 == stream2.getvalue()
 
 
 if __name__ == '__main__':
