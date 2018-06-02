@@ -141,6 +141,16 @@ class CommandsTestCase(unittest.TestCase):
 
         assert stream2.getvalue() == ref1
 
+    def test_Grep(self):
+        args = '"a" -i -w -A 1 grep_example.txt '
+        stream1 = StringIO()
+        stream2 = StringIO()
+        d = Grep(stream1, stream2)
+        d.exec(args)
+        ref1 = 'so much "is " a\n\nbye world A\nBYE world\n'
+
+        assert ref1 == stream2.getvalue()
+
 
 if __name__ == '__main__':
     unittest.main()
