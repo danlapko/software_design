@@ -33,6 +33,7 @@ def process(line, envs):
             continue
 
         cmd, args = block_to_cmd_args(block)
+        print(args)
         cls = multiplexor(cmd)
         if cls:
             stream1 = stream2
