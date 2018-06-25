@@ -23,7 +23,7 @@ class Command:
     mnemonic = ""
 
     def __init__(self, InputStream=sys.stdin, OutputStream=sys.stdout,
-                 ErrorStream=sys.stderr, env=None):
+                       ErrorStream=sys.stderr, env=None):
         self.InputStream = InputStream
         self.OutputStream = OutputStream
         self.ErrorStream = ErrorStream
@@ -153,26 +153,14 @@ class Ls(Command):
     mnemonic = "ls"
 
     def exec(self, args):
-        args = args.strip()
-        args = split_by_spaces(args)
-        for i in range(len(args)):
-            args[i] = strip_quotes(args[i])
 
-        path_base = str(os.getcwd())
-        if args != []:
-            for file in args:
-                path = path_base + "/" + str(file)
-
-                files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
-
-                for i in files:
-                    print(i, file=self.OutputStream)
+        if len(args) == 0:
+            path = '.'
         else:
-            path = path_base
-            files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+            path = args.split()[0]
 
-            for i in files:
-                print(i, file=self.OutputStream)
+        for dir in os.listdir(path):
+            print(dir, file=self.OutputStream)
 
 
 class Cd(Command):

@@ -46,8 +46,5 @@ def process(line, envs):
     print(stream2.getvalue())
 
 
-# test_s = "'echo' $ \"a|$sdf$a$a  $m\" | cat aa '$asd|fgf'$h | echo $abcde'a$\"sd\"f' | pwd 'asdfasd' | cat example.txt"
-# test_s = "echo 3 | cat | ls|echo $a|pwd | cat | cat |cat|cat"
-# test_s = 'echo 123 | wc'
 if __name__ == "__main__":
     loop()
